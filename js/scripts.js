@@ -24,3 +24,14 @@ function numberOfOccurrencesInText(word, text) {
   });
   return wordCount;
 }
+
+function omitOffensiveWords(text) {
+  const wordArray = ['zoinks', 'muppeteer', 'biffaroni', 'loopdaloop'];
+  
+  wordArray.forEach(function(element) {
+    if (text.includes(element)) {
+      let newText = text.replaceAll(element, 'pudding');
+      console.log(newText);
+    }
+  });
+}

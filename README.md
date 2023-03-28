@@ -68,3 +68,9 @@ const text = "Red! Red. I like red, green, and yellow.";
 const word = "Red";
 numberOfOccurrencesInText(word, text);
 Expected Output: 3
+
+Test: "It should omit offensive words from the text passage"
+Code:
+let text = "Hi Sally, I can't believe that the biffaroni clown ate all of that biffaroni!";
+numberOfOccurrencesInText(text);
+Expected Output: "Hi Sally, I can't believe that the pudding clown ate all of that pudding!";
