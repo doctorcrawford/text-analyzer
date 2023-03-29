@@ -1,7 +1,13 @@
+// Utility Logic
+
+function isEmpty(testString) {
+  return (testString.trim().length === 0);
+}
+
 // Business Logic
 
 function wordCounter(text) {
-  if (text.trim().length === 0) {
+  if (isEmpty(text)) {
     return 0;
   }
   let wordCount = 0;
@@ -15,6 +21,9 @@ function wordCounter(text) {
 }
 
 function numberOfOccurrencesInText(word, text) {
+  if (isEmpty(word)) {
+    return 0;
+  }
   const textArray = text.split(" ");
   let wordCount = 0;
   textArray.forEach(function(element) {
@@ -25,13 +34,71 @@ function numberOfOccurrencesInText(word, text) {
   return wordCount;
 }
 
-function omitOffensiveWords(text) {
-  const wordArray = ['zoinks', 'muppeteer', 'biffaroni', 'loopdaloop'];
+function eachWordCounter(text) {
+  if (isEmpty(text)) {
+    return 0;
+  }
+  let output;
+  let wordArray = text.split(" ");
+  wordArray.forEach(function(word) {
+    let wordCount = numberOfOccurrencesInText(word, text)
+    console.log(word + ': ' + wordCount);
+  });
+  return output;
+}
+
+function omitOffensiveWords(inputText) {
+  let output = inputText.slice(); //make a copy
+  const badWords = ['zoinks', 'muppeteer', 'biffaroni', 'loopdaloop'];
   
-  wordArray.forEach(function(element) {
-    if (text.includes(element)) {
-      let newText = text.replaceAll(element, 'pudding');
-      console.log(newText);
+  badWords.forEach(function(badWord) {
+    if (output.includes(badWord)) {
+      output = output.replaceAll(badWord, 'pudding');
     }
   });
+  return output;
 }
+
+//UI Logic
+
+function boldPassage(word, text) {
+  if ((isEmpty(word)) || (isEmpty(text))) {
+    return null;
+  }
+  const p = document.createElement("p");
+  let textArray = text.split(" ");
+  textArray.forEach(function(element, index) {
+    if (word === element) {
+      const bold = document.createElement("strong");
+      bold.append(element);
+      p.append(bold);
+    } else {
+      p.append(element);
+    }
+    if (index !== (textArray.length - 1)) {
+    p.append(" ");
+    }
+  });
+  return p;
+}
+
+function handleFormSubmission(event) {
+  event.preventDefault();
+  const passage = document.getElementById("text-passage").value;
+  const word = document.getElementById("word").value;
+  const wordCount = wordCounter(passage);
+  const occurrencesOfWord = numberOfOccurrencesInText(word, passage);
+  document.getElementById("total-count").innerText = wordCount;
+  document.getElementById("selected-count").innerText = occurrencesOfWord;
+
+  let boldedPassage = boldPassage(word, passage);
+  if (boldedPassage) {
+    document.querySelector("div#bolded-passage").append(boldedPassage);
+  } else {
+    document.querySelector("div#bolded-passage").innerText = null;
+  }
+}
+
+window.addEventListener("load", function() {
+  document.querySelector("form#word-counter").addEventListener("submit", handleFormSubmission);
+});
